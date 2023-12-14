@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover">
+    <title>HAO LINE LIFF</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        button {
+            display: none;
+            width: 80%;
+            height: 50px;
+            margin: 20px auto;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+        }
+
+        button:hover,
+        button:focus {
+            background-color: #45a049;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px auto;
+            display: block;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .link-button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            color: #2193b0;
+            background-color: #fff;
+            border: 2px solid #2193b0;
+            border-radius: 4px;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .link-button:hover,
+        .link-button:focus {
+            color: #fff;
+            background-color: #2193b0;
+            border-color: transparent;
+        }
+
+        .link-button:active {
+            background-color: #19718c;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        .marquee {
+            width: 50%;
+            height: 50px;
+            margin: 0 auto;
+            background-color: #4CAF50;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .marquee p {
+            position: absolute;
+            white-space: nowrap;
+            margin: 0;
+            line-height: 50px;
+            will-change: transform;
+            animation: marquee 17s linear infinite;
+        }
+
+        @keyframes marquee {
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(-100%);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a id="btnOfficialAccount" class="link-button" href="https://lin.ee/6wFSgQs" target="_blank">加入官方帳號</a><a
+            id="btnOfficialAccount" class="link-button" href="https://ww.haoting.info/" target="_blank">官網</a>
+        <input type="number" id="amount" placeholder="輸入金額(不會真的扣錢)" />
+        <input type="text" id="customText" placeholder="輸入文字(按下去發送出來的內容)" />
+        <button id="btnShare3" onclick="sendShare_Pay()">LINE PAY</button>
+        <button id="btnLogin" onclick="liff.login()">登入</button>
+        <button id="btnLogOut" onclick="logOut()">登出</button>
+    </div>
+    <div class="marquee">
+        <p>此非官授權後只有代發消息功能（line Liff)，並且要點擊網址後才會發出，跟一般企業、店家所使用的非官授權是一樣的，不會被盜用任何個資、有疑慮請勿使用。此連結為測試Liff之功能，任何違法事情與作者無關。</p>
+    </div>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script>
+        async function sendShare_Pay() {
+            let amount = document.getElementById("amount").value;
+            let customText = document.getElementById("customText").value;
+
+            if (!amount) {
+                amount = "10000";
+            }
+            if (!customText) {
+                customText = "我好可憐";
+            }
+
+            customText = encodeURIComponent(customText);
+
+            let name = await liff.getProfile().then((profile) => {
+                return profile.displayName;
+            }).catch((err) => {
+                return err;
+            });
+
+            const result = await liff.shareTargetPicker([
+                {
+                    "type": "flex",
+                    "altText": "已收到NT$ " + amount + "的轉帳。",
+                    "contents": {
+                        "type": "bubble",
+                        "size": "kilo",
+                        "hero": {
+                            "type": "image",
+                            "url": "https://i.imgur.com/j5VkCxE.png",
+                            "size": "full",
+                            "aspectRatio": "20:13",
+                            "aspectMode": "cover",
+                            "action": {
+                                "type": "uri",
+                                "uri": "https://liff.line.me/2002197923-oyY6wJ68?auto=yes&type=text&text=" + customText
+                            },
+                            "position": "relative"
+                        },
+                        "body": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": "接收（LINE Pay）",
+                                    "weight": "bold",
+                                    "size": "xs",
+                                    "action": {
+                                        "type": "uri",
+                                        "label": "action",
+                                        "uri": "https://liff.line.me/2002197923-oyY6wJ68?auto=yes&type=text&text=" + customText
+                                    }
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "您已收到 NT$ " + amount + "。（來自：" + name + "）",
+                                    "size": "xs",
+                                    "contents": [],
+                                    "color": "#8E8E8E",
+                                    "action": {
+                                        "type": "uri",
+                                        "label": "action",
+                                        "uri": "https://liff.line.me/2002197923-oyY6wJ68?auto=yes&type=text&text=" + customText
+                                    }
+                                },
+                                {
+                                    "type": "button",
+                                    "position": "relative",
+                                    "style": "secondary",
+                                    "height": "sm",
+                                    "margin": "lg",
+                                    "color": "#F0F0F0",
+                                    "action": {
+                                        "type": "uri",
+                                        "label": "瞭解更多",
+                                        "uri": "https://liff.line.me/2002197923-oyY6wJ68?auto=yes&type=text&text=" + customText
+                                    },
+                                    "scaling": true,
+                                    "offsetEnd": "none"
+                                }
+                            ],
+                            "action": {
+                                "type": "uri",
+                                "label": "action",
+                                "uri": "https://liff.line.me/2002197923-oyY6wJ68?auto=yes&type=text&text=" + customText
+                            }
+                        },
+                        "footer": {
+                            "type": "box",
+                            "layout": "baseline",
+                            "contents": [
+                                {
+                                    "type": "icon",
+                                    "url": "https://i.imgur.com/LriSrg0.png",
+                                    "margin": "none",
+                                    "size": "xs",
+                                    "scaling": true,
+                                    "offsetTop": "xs"
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "LINE Pay",
+                                    "margin": "sm",
+                                    "size": "xxs",
+                                    "color": "#8E8E8E"
+                                },
+                                {
+                                    "type": "icon",
+                                    "url": "https://i.imgur.com/aKbXQ9D.png",
+                                    "margin": "sm",
+                                    "size": "xxs",
+                                    "offsetTop": "xs"
+                                }
+                            ],
+                            "action": {
+                                "type": "uri",
+                                "label": "action",
+                                "uri": "https://liff.line.me/2002197923-oyY6wJ68?auto=yes&type=text&text=" + customText
+                            },
+                            "position": "relative"
+                        },
+                        "styles": {
+                            "footer": {
+                                "separator": true
+                            }
+                        }
+                    }
+                }
+            ])
+
+            if (result) {
+                alert(`[${result.status}] 發送成功`)
+            } else {
+                const [majorVer, minorVer, patchVer] = (liff.getLineVersion() || "").split('.');
+                if (minorVer === undefined) {
+                    alert('在外部瀏覽器中取消了分享目標選擇')
+                    return
+                }
+                if (parseInt(majorVer) >= 10 && parseInt(minorVer) >= 10 && parseInt(patchVer) > 0) {
+                    alert('在LINE應用程式中取消了分享目標選擇')
+                }
+            }
+        }
+
+        function logOut() {
+            liff.logout()
+            window.location.reload()
+        }
+
+        async function main() {
+            await liff.init({ liffId: "2002227321-zqk2jg6D" })
+            if (liff.isLoggedIn()) {
+                document.getElementById("btnShare3").style.display = "block"
+                if (!liff.isInClient()) {
+                    document.getElementById("btnLogOut").style.display = "block"
+                }
+            } else {
+                document.getElementById("btnLogin").style.display = "block"
+            }
+        }
+        main()
+    </script>
+</body>
+
+</html>
