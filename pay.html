@@ -125,7 +125,7 @@
     <div class="container">
         <a id="btnOfficialAccount" class="link-button" href="https://lin.ee/6wFSgQs" target="_blank">加入官方帳號</a><a
             id="btnOfficialAccount" class="link-button" href="https://ww.haoting.info/" target="_blank">官網</a>
-        <input type="number" id="amount" placeholder="輸入金額(不會真的扣錢)" oninput="validateNumberInput(this)" />
+        <input type="number" id="amount" placeholder="輸入金額(不會真的扣錢)" min="0" step="1" />
         <input type="text" id="customText" placeholder="輸入文字(按下去發送出來的內容)" />
         <button id="btnShare3" onclick="sendShare_Pay()">LINE PAY</button>
         <button id="btnLogin" onclick="liff.login()">登入</button>
@@ -136,10 +136,6 @@
     </div>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <script>
-        function validateNumberInput(input) {
-            // 只允許數字
-            input.value = input.value.replace(/\D/g, '');
-        }
         async function sendShare_Pay() {
             let amount = document.getElementById("amount").value;
             let customText = document.getElementById("customText").value;
