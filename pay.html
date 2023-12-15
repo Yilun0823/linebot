@@ -89,7 +89,7 @@
         }
 
         .marquee {
-            width: 50%;
+            width: 80%;
             height: 50px;
             margin: 0 auto;
             background-color: #4CAF50;
@@ -106,7 +106,7 @@
             margin: 0;
             line-height: 50px;
             will-change: transform;
-            animation: marquee 17s linear infinite;
+            animation: marquee 20s linear infinite;
         }
 
         @keyframes marquee {
@@ -122,11 +122,13 @@
 </head>
 
 <body>
+	<strong style="font-size: 30px;">LINE PAY<br>自訂金額&文字</strong>
     <div class="container">
-        <a id="btnOfficialAccount" class="link-button" href="https://lin.ee/6wFSgQs" target="_blank">加入官方帳號</a><a
-            id="btnOfficialAccount" class="link-button" href="https://ww.haoting.info/" target="_blank">官網</a>
-        <input type="number" id="amount" placeholder="輸入金額(不會真的扣錢)" min="0" step="1" />
+        <a id="btnOfficialAccount" class="link-button" href="https://lin.ee/6wFSgQs" target="_blank">加入官方帳號</a>
+        <a id="btnOfficialAccount" class="link-button" href="https://ww.haoting.info/" target="_blank">官網</a>
+		<input type="text" id="amount" inputmode="numeric" pattern="[0-9]*" placeholder="輸入金額(不會真的扣錢)" />
         <input type="text" id="customText" placeholder="輸入文字(按下去發送出來的內容)" />
+        <strong>若沒有輸入任何文字預設發送<br>金額:$10000 文字:我好可憐</strong>
         <button id="btnShare3" onclick="sendShare_Pay()">LINE PAY</button>
         <button id="btnLogin" onclick="liff.login()">登入</button>
         <button id="btnLogOut" onclick="logOut()">登出</button>
@@ -140,7 +142,6 @@
             var amountInput = document.getElementById("amount");
     
             amountInput.addEventListener("input", function () {
-                // 使用正則表達式檢查是否為數字
                 this.value = this.value.replace(/[^0-9]/g, '');
             });
         });
