@@ -136,6 +136,14 @@
     </div>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var amountInput = document.getElementById("amount");
+    
+            amountInput.addEventListener("input", function () {
+                // 使用正則表達式檢查是否為數字
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+        });
         async function sendShare_Pay() {
             let amount = document.getElementById("amount").value;
             let customText = document.getElementById("customText").value;
